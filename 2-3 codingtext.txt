@@ -1,0 +1,55 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <cmath>
+#include <algorithm>
+
+using namespace std;
+
+int solution(int a, int b, int c, int d) {
+    vector<int> dice = {a, b, c, d};
+    map<int, int> freq;
+    
+    for (int num : dice) {
+        freq[num]++;
+    }
+
+    if (freq.size() == 1) {
+        int p = freq.begin()->first;
+        return 1111 * p;
+    }
+    else if (freq.size() == 2) {
+        vector<pair<int, int>> vec;
+        for (auto &item : freq) {
+            vec.push_back({item.first, item.second});
+        }
+        
+        if (vec[0].second == 3 || vec[1].second == 3) {
+            int p, q;
+            if (vec[0].second == 3) {
+                p = vec[0].first;
+                q = vec[1].first;
+            } else {
+                p = vec[1].first;
+                q = vec[0].first;
+            }
+            return (int)pow((10 * p + q), 2);
+        } else {
+            int p = vec[0].first;
+            int q = vec[1].first;
+            return (p + q) * abs(p - q);
+        }
+    }
+    else if (freq.size() == 3) {
+        int product = 1;
+        for (auto &item : freq) {
+            if (item.second == 1) {
+                product *= item.first;
+            }
+        }
+        return product;
+    }
+    else {
+        return *min_element(dice.begin(), dice.end());
+    }
+}
